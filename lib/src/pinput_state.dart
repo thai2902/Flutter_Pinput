@@ -210,8 +210,14 @@ class _PinputState extends State<Pinput>
     TextSelection selection,
     SelectionChangedCause? cause,
   ) {
-    _effectiveController.selection =
-        TextSelection.collapsed(offset: pin.length);
+    // Only force cursor to end for user interactions like tap, not for keyboard input
+    if (cause == SelectionChangedCause.tap ||
+        cause == SelectionChangedCause.longPress ||
+        cause == SelectionChangedCause.drag ||
+        cause == SelectionChangedCause.toolbar) {
+      _effectiveController.selection =
+          TextSelection.collapsed(offset: pin.length);
+    }
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.iOS:
